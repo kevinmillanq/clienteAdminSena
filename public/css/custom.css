@@ -1,0 +1,42 @@
+.card-img-top {
+    height: 250px;
+    object-fit: cover;
+}
+.pagination {
+    justify-content: center;
+}
+
+.page-item.active .page-link {
+    background-color: rgb(35, 185, 105);
+    border-color:  rgb(35, 185, 105);
+}
+
+.page-link {
+    color: green;
+}
+
+.page-link:hover {
+    color: #005700;
+}
+
+.page-item.disabled .page-link {
+    color: #a1a1a1;
+}
+
+.navbar .nav-link.active {
+    font-weight: 600;
+    color: #28a745;
+}
+
+.table thead th {
+    white-space: nowrap;
+}
+
+.footer-link {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.footer-link:hover {
+    color: #28a745;
+}

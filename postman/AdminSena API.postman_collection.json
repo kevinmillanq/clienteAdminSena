@@ -1,0 +1,142 @@
+{
+  "info": {
+    "name": "AdminSena API",
+    "description": "Coleccion GET para la API de AdminSena. Base: {{baseUrl}}",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://api.adminsena.test/v1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Areas",
+      "item": [
+        {
+          "name": "Listar areas",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/areas", "host": ["{{baseUrl}}"], "path": ["areas"] }
+          }
+        },
+        {
+          "name": "Ver area",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/areas/1", "host": ["{{baseUrl}}"], "path": ["areas", "1"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Training Centers",
+      "item": [
+        {
+          "name": "Listar centros de formacion",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/training-centers", "host": ["{{baseUrl}}"], "path": ["training-centers"] }
+          }
+        },
+        {
+          "name": "Ver centro de formacion",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/training-centers/1", "host": ["{{baseUrl}}"], "path": ["training-centers", "1"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Teachers",
+      "item": [
+        {
+          "name": "Listar instructores",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/teachers", "host": ["{{baseUrl}}"], "path": ["teachers"] }
+          }
+        },
+        {
+          "name": "Ver instructor",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/teachers/1", "host": ["{{baseUrl}}"], "path": ["teachers", "1"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Courses",
+      "item": [
+        {
+          "name": "Listar cursos",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/courses", "host": ["{{baseUrl}}"], "path": ["courses"] }
+          }
+        },
+        {
+          "name": "Ver curso",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/courses/1", "host": ["{{baseUrl}}"], "path": ["courses", "1"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Computers",
+      "item": [
+        {
+          "name": "Listar computadores",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/computers", "host": ["{{baseUrl}}"], "path": ["computers"] }
+          }
+        },
+        {
+          "name": "Ver computador",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/computers/1", "host": ["{{baseUrl}}"], "path": ["computers", "1"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Apprentices",
+      "item": [
+        {
+          "name": "Listar aprendices",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/apprentices", "host": ["{{baseUrl}}"], "path": ["apprentices"] }
+          }
+        },
+        {
+          "name": "Ver aprendiz",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/apprentices/1", "host": ["{{baseUrl}}"], "path": ["apprentices", "1"] }
+          }
+        }
+      ]
+    }
+  ]
+}

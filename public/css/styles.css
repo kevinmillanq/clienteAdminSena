@@ -1,0 +1,11 @@
+/* En tu archivo de estilos CSS principal o en uno específico para el navbar */
+.logo {
+    font-size: 1.5rem; /* Ajusta el tamaño según lo necesites */
+    font-weight: 700; /* Esto mantendrá la proporción original del logo */
+    color: #28a745; /* Esto mantendrá la proporción original del logo */
+}
+
+.api-url {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
