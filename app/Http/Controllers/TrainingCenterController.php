@@ -7,31 +7,79 @@ use Illuminate\Http\Request;
 
 class TrainingCenterController extends Controller
 {
+    protected $url;
 
-    // Método privado para manejar llamadas HTTP repetitivas
-    private function fetchDataFromApi($url)
+    public function __construct()
     {
-        $response = Http::get($url);
-        return $response->json() ?? [];
+        $this->url = env('URL_SERVER_API', 'http://127.0.0.1:8000/api') . '/training-centers';
     }
 
-    public function index()   //http://api.bloger.test/v1/training-centers
+    private function fetchDataFromApi($url)
     {
+        try {
+            $response = Http::get($url);
+            return $response->json() ?? [];
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
 
-        $url = env('URL_SERVER_API');
-
-        $trainingCenters = $this->fetchDataFromApi($url . '/training-centers');
-
+    public function index()
+    {
+        $trainingCenters = $this->fetchDataFromApi($this->url);
         return view('training-centers.index', compact('trainingCenters'));
+    }
+
+    public function create()
+    {
+        return view('training-centers.create');
+    }
+
+    public function store(Request $request)
+    {
+        try {
+            $response = Http::post($this->url, [
+                'name' => $request->name,
+                'location' => $request->location,
+            ]);
+
+            if ($response->successful()) {
+                return redirect()->route('training-centers.index')->with('success', 'Centro de formación creado con éxito');
+            }
+
+            return redirect()->back()->with('error', 'Error al guardar el centro en el servidor.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'No se pudo conectar con el servidor backend.');
+        }
     }
 
     public function show($id)
     {
-
-        $url = env('URL_SERVER_API');
-
-        $trainingCenter = $this->fetchDataFromApi($url . '/training-centers/' . $id);
-
+        $trainingCenter = $this->fetchDataFromApi($this->url . '/' . $id);
         return view('training-centers.show', compact('trainingCenter'));
+    }
+
+    public function edit($id)
+    {
+        $trainingCenter = $this->fetchDataFromApi($this->url . '/' . $id);
+        return view('training-centers.edit', compact('trainingCenter'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        try {
+            $response = Http::put($this->url . '/' . $id, [
+                'name' => $request->name,
+                'location' => $request->location,
+            ]);
+
+            if ($response->successful()) {
+                return redirect()->route('training-centers.index')->with('success', 'Centro de formación actualizado con éxito');
+            }
+
+            return redirect()->back()->with('error', 'Error al actualizar el centro.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'No se pudo conectar con el servidor backend.');
+        }
     }
 }

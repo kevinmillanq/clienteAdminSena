@@ -34,7 +34,7 @@
                     <a class="nav-link {{ request()->routeIs('apprentices.*') ? 'active' : '' }}" href="{{ route('apprentices.index') }}">Aprendices</a>
                 </li>
             </ul>
-            <span class="navbar-text api-url">
+            <span class="navbar-text api-url ms-3">
                 API: {{ env('URL_SERVER_API') }}
             </span>
         </div>

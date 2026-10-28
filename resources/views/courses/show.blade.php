@@ -1,57 +1,41 @@
-@php
-    $areaNames = collect($areas)->pluck('name', 'id');
-    $centerNames = collect($trainingCenters)->pluck('name', 'id');
-@endphp
-
 @extends('layouts.app')
 
-@section('title', 'Curso')
-
 @section('content')
-<div class="container my-5">
-    <h2 class="mb-4 text-success">Detalles del Curso</h2>
+    <h1>Detalle del Curso</h1>
 
-    <div class="table-responsive">
-        <table class="table table-bordered table-hover">
-            <thead class="table-success">
-                <tr>
-                    <th scope="col">Atributo</th>
-                    <th scope="col">Valor</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>id</td>
-                    <td>{{ $course['id'] ?? '' }}</td>
-                </tr>
-                <tr>
-                    <td>course_number</td>
-                    <td>{{ $course['course_number'] ?? '' }}</td>
-                </tr>
-                <tr>
-                    <td>day</td>
-                    <td>{{ $course['day'] ?? '' }}</td>
-                </tr>
-                <tr>
-                    <td>area_id</td>
-                    <td>{{ $course['area_id'] ?? '' }} — {{ $areaNames[$course['area_id'] ?? 0] ?? '' }}</td>
-                </tr>
-                <tr>
-                    <td>training_center_id</td>
-                    <td>{{ $course['training_center_id'] ?? '' }} — {{ $centerNames[$course['training_center_id'] ?? 0] ?? '' }}</td>
-                </tr>
-                <tr>
-                    <td>created_at</td>
-                    <td>{{ $course['created_at'] ?? '' }}</td>
-                </tr>
-                <tr>
-                    <td>updated_at</td>
-                    <td>{{ $course['updated_at'] ?? '' }}</td>
-                </tr>
-            </tbody>
+    @if(isset($course) && isset($course['id']))
+        @php
+            $areaMap = collect($areas ?? [])->pluck('name', 'id')->toArray();
+            $centerMap = collect($trainingCenters ?? [])->pluck('name', 'id')->toArray();
+        @endphp
+
+        <table class="table table-bordered" style="max-width: 600px;">
+            <tr>
+                <th style="width: 200px;">ID:</th>
+                <td>{{ $course['id'] }}</td>
+            </tr>
+            <tr>
+                <th>Nombre / Número:</th>
+                <td>{{ $course['course_name'] ?? $course['course_number'] ?? '' }}</td>
+            </tr>
+            <tr>
+                <th>Día / Jornada:</th>
+                <td>{{ $course['day'] }}</td>
+            </tr>
+            <tr>
+                <th>Área:</th>
+                <td>{{ $areaMap[$course['area_id']] ?? $course['area_id'] }}</td>
+            </tr>
+            <tr>
+                <th>Centro de Formación:</th>
+                <td>{{ $centerMap[$course['training_center_id']] ?? $course['training_center_id'] }}</td>
+            </tr>
         </table>
-    </div>
 
-    <a href="{{ route('courses.index') }}" class="btn btn-outline-success">Volver al listado</a>
-</div>
+        <a href="{{ route('courses.edit', $course['id']) }}" class="btn btn-warning btn-sm">Editar</a>
+    @else
+        <p>No se encontró la información del curso.</p>
+    @endif
+
+    <a href="{{ route('courses.index') }}" class="btn btn-outline-secondary btn-sm">Volver</a>
 @endsection

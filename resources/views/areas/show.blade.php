@@ -1,30 +1,24 @@
 @extends('layouts.app')
 
-@section('title', 'Área')
-
 @section('content')
-<div class="container my-5">
-    <h2 class="mb-4 text-success">Detalles del Área</h2>
+    <h1>Detalle del Área</h1>
 
-    <div class="table-responsive">
-        <table class="table table-bordered table-hover">
-            <thead class="table-success">
-                <tr>
-                    <th scope="col">id</th>
-                    <th scope="col">name</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($area as $key => $value)
-                    <tr>
-                        <td>{{ $key }}</td>
-                        <td>{{ $value }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
+    @if(isset($area) && isset($area['id']))
+        <table class="table table-bordered" style="max-width: 500px;">
+            <tr>
+                <th style="width: 150px;">ID:</th>
+                <td>{{ $area['id'] }}</td>
+            </tr>
+            <tr>
+                <th>Nombre:</th>
+                <td>{{ $area['name'] }}</td>
+            </tr>
         </table>
-    </div>
 
-    <a href="{{ route('areas.index') }}" class="btn btn-outline-success">Volver al listado</a>
-</div>
+        <a href="{{ route('areas.edit', $area['id']) }}" class="btn btn-warning btn-sm">Editar</a>
+    @else
+        <p>No se encontró la información del área.</p>
+    @endif
+
+    <a href="{{ route('areas.index') }}" class="btn btn-outline-secondary btn-sm">Volver</a>
 @endsection

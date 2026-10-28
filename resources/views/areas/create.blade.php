@@ -1,21 +1,23 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h2>Crear Area</h2>
+    <h1>Crear Área</h1>
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success')}}
-</div>
+    @if(session('error'))
+        <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
 
     <form action="{{ route('areas.store') }}" method="POST">
         @csrf
-        <div class="mb-3">
-            <label for="name" class="form-label">Nombre del Area:</label>
-            <input type="text" name="name" id="name" class="form-control" required>
-        </div>
-        <button type="submit" class="btn btn-outline-success">Enviar Formulario</button>
+
+        <label>
+            Nombre:
+            <br>
+            <input type="text" name="name" class="form-control" required>
+        </label>
+        <br><br>
+
+        <button type="submit" class="btn btn-outline-success btn-sm">Enviar Formulario:</button>
+        <a href="{{ route('areas.index') }}" class="btn btn-outline-secondary btn-sm">Volver</a>
     </form>
-</div>
 @endsection

@@ -1,47 +1,53 @@
-@php
-    $areaNames = collect($areas)->pluck('name', 'id');
-    $centerNames = collect($trainingCenters)->pluck('name', 'id');
-@endphp
-
 @extends('layouts.app')
 
-@section('title', 'Cursos')
-
 @section('content')
-    <div class="container mt-4">
-        <h1 class="mb-4">Lista de Cursos</h1>
+    <h1>Lista de Cursos</h1>
 
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>id</th>
-                        <th>course_number</th>
-                        <th>day</th>
-                        <th>area_id</th>
-                        <th>training_center_id</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($courses as $course)
-                        <tr>
-                            <td>{{ $course['id'] }}</td>
-                            <td>{{ $course['course_number'] }}</td>
-                            <td>{{ $course['day'] }}</td>
-                            <td>{{ $course['area_id'] }} <span class="badge bg-light text-dark">{{ $areaNames[$course['area_id']] ?? '' }}</span></td>
-                            <td>{{ $course['training_center_id'] }} <span class="badge bg-light text-dark">{{ $centerNames[$course['training_center_id']] ?? '' }}</span></td>
-                            <td>
-                                <a href="{{ route('courses.show', $course['id']) }}" class="btn btn-info btn-sm">Ver más</a>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="text-center">No hay registros.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-    </div>
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+    @if(session('error'))
+        <div class="alert alert-danger">{{ session('error') }}</div>
+    @endif
+
+    @php
+        $areaMap = collect($areas ?? [])->pluck('name', 'id')->toArray();
+        $centerMap = collect($trainingCenters ?? [])->pluck('name', 'id')->toArray();
+    @endphp
+
+    <table class="table table-bordered table-striped mt-3">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>course_name</th>
+                <th>day</th>
+                <th>&Aacute;rea</th>
+                <th>Centro de Formaci&oacute;n</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse ($courses as $course)
+                <tr>
+                    <td>{{ $course['id'] }}</td>
+                    <td>{{ $course['course_name'] ?? $course['course_number'] ?? '' }}</td>
+                    <td>{{ $course['day'] }}</td>
+                    <td>{{ $areaMap[$course['area_id']] ?? $course['area_id'] }}</td>
+                    <td>{{ $centerMap[$course['training_center_id']] ?? $course['training_center_id'] }}</td>
+                    <td>
+                        <a href="{{ route('courses.create') }}" class="btn btn-outline-success btn-sm">Crear</a>
+                        <a href="{{ route('courses.show', $course['id']) }}" class="btn btn-info btn-sm">Ver m&aacute;s</a>
+                        <a href="{{ route('courses.edit', $course['id']) }}" class="btn btn-warning btn-sm">Editar</a>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="6" class="text-center">
+                        No hay registros.
+                        <a href="{{ route('courses.create') }}" class="btn btn-outline-success btn-sm ms-2">Crear</a>
+                    </td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
 @endsection

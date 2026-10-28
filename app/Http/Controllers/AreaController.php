@@ -7,29 +7,34 @@ use Illuminate\Http\Request;
 
 class AreaController extends Controller
 {
-    // Servidor adminSena API
-    protected $url = 'http://127.0.0.1:8000/api/areas';
+    protected $url;
 
-    // Listar todas las áreas
-    public function index()
+    public function __construct()
+    {
+        $this->url = env('URL_SERVER_API', 'http://127.0.0.1:8000/api') . '/areas';
+    }
+
+    private function fetchDataFromApi($url)
     {
         try {
-            $response = Http::get($this->url);
-            $areas = $response->json() ?? [];
+            $response = Http::get($url);
+            return $response->json() ?? [];
         } catch (\Exception $e) {
-            $areas = [];
+            return [];
         }
+    }
 
+    public function index()
+    {
+        $areas = $this->fetchDataFromApi($this->url);
         return view('areas.index', compact('areas'));
     }
 
-    // Mostrar formulario de creación
     public function create()
     {
         return view('areas.create');
     }
 
-    // POST: Enviar datos para crear en adminSena
     public function store(Request $request)
     {
         try {
@@ -38,46 +43,31 @@ class AreaController extends Controller
             ]);
 
             if ($response->successful()) {
-                return redirect()->route('areas.index')->with('success', 'Área creada con éxito en el servidor');
+                return redirect()->route('areas.index')->with('success', 'Área creada con éxito');
             }
 
-            return redirect()->route('areas.create')->with('error', 'Error al guardar en el servidor backend.');
+            return redirect()->back()->with('error', 'Error al guardar el área en el servidor.');
         } catch (\Exception $e) {
-            return redirect()->route('areas.create')->with('error', 'No se pudo conectar con el servidor backend. Verifica que MySQL y adminSena estén encendidos.');
+            return redirect()->back()->with('error', 'No se pudo conectar con el servidor backend.');
         }
     }
 
-    // Ver detalles de un área
     public function show($id)
     {
-        try {
-            $response = Http::get("{$this->url}/{$id}");
-            $area = $response->json();
-        } catch (\Exception $e) {
-            $area = null;
-        }
-
+        $area = $this->fetchDataFromApi($this->url . '/' . $id);
         return view('areas.show', compact('area'));
     }
 
-    // Mostrar formulario de edición
     public function edit($id)
     {
-        try {
-            $response = Http::get("{$this->url}/{$id}");
-            $area = $response->json();
-        } catch (\Exception $e) {
-            $area = null;
-        }
-
+        $area = $this->fetchDataFromApi($this->url . '/' . $id);
         return view('areas.edit', compact('area'));
     }
 
-    // UPDATE: Enviar cambios modificados a adminSena
     public function update(Request $request, $id)
     {
         try {
-            $response = Http::put("{$this->url}/{$id}", [
+            $response = Http::put($this->url . '/' . $id, [
                 'name' => $request->name,
             ]);
 

@@ -7,37 +7,103 @@ use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
+    protected $url;
 
-    // Método privado para manejar llamadas HTTP repetitivas
-    private function fetchDataFromApi($url)
+    public function __construct()
     {
-        $response = Http::get($url);
-        return $response->json() ?? [];
+        $this->url = env('URL_SERVER_API', 'http://127.0.0.1:8000/api') . '/courses';
     }
 
-    public function index()   //http://api.bloger.test/v1/courses
+    private function fetchDataFromApi($url)
     {
+        try {
+            $response = Http::get($url);
+            return $response->json() ?? [];
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
 
-        $url = env('URL_SERVER_API');
-
-        $courses = $this->fetchDataFromApi($url . '/courses');
-
-        $areas = $this->fetchDataFromApi($url . '/areas');
-        $trainingCenters = $this->fetchDataFromApi($url . '/training-centers');
+    public function index()
+    {
+        $urlBase = env('URL_SERVER_API', 'http://127.0.0.1:8000/api');
+        $courses = $this->fetchDataFromApi($this->url);
+        $areas = $this->fetchDataFromApi($urlBase . '/areas');
+        $trainingCenters = $this->fetchDataFromApi($urlBase . '/training-centers');
 
         return view('courses.index', compact('courses', 'areas', 'trainingCenters'));
     }
 
+    public function create()
+    {
+        $urlBase = env('URL_SERVER_API', 'http://127.0.0.1:8000/api');
+        $areas = $this->fetchDataFromApi($urlBase . '/areas');
+        $trainingCenters = $this->fetchDataFromApi($urlBase . '/training-centers');
+
+        return view('courses.create', compact('areas', 'trainingCenters'));
+    }
+
+    public function store(Request $request)
+    {
+        try {
+            $name = $request->course_name ?? $request->course_number;
+            $response = Http::post($this->url, [
+                'course_name' => $name,
+                'course_number' => $name,
+                'day' => $request->day,
+                'area_id' => $request->area_id,
+                'training_center_id' => $request->training_center_id,
+            ]);
+
+            if ($response->successful()) {
+                return redirect()->route('courses.index')->with('success', 'Curso creado con éxito');
+            }
+
+            return redirect()->back()->with('error', 'Error al guardar el curso en el servidor.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'No se pudo conectar con el servidor backend.');
+        }
+    }
+
     public function show($id)
     {
-
-        $url = env('URL_SERVER_API');
-
-        $course = $this->fetchDataFromApi($url . '/courses/' . $id);
-
-        $areas = $this->fetchDataFromApi($url . '/areas');
-        $trainingCenters = $this->fetchDataFromApi($url . '/training-centers');
+        $urlBase = env('URL_SERVER_API', 'http://127.0.0.1:8000/api');
+        $course = $this->fetchDataFromApi($this->url . '/' . $id);
+        $areas = $this->fetchDataFromApi($urlBase . '/areas');
+        $trainingCenters = $this->fetchDataFromApi($urlBase . '/training-centers');
 
         return view('courses.show', compact('course', 'areas', 'trainingCenters'));
+    }
+
+    public function edit($id)
+    {
+        $urlBase = env('URL_SERVER_API', 'http://127.0.0.1:8000/api');
+        $course = $this->fetchDataFromApi($this->url . '/' . $id);
+        $areas = $this->fetchDataFromApi($urlBase . '/areas');
+        $trainingCenters = $this->fetchDataFromApi($urlBase . '/training-centers');
+
+        return view('courses.edit', compact('course', 'areas', 'trainingCenters'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        try {
+            $name = $request->course_name ?? $request->course_number;
+            $response = Http::put($this->url . '/' . $id, [
+                'course_name' => $name,
+                'course_number' => $name,
+                'day' => $request->day,
+                'area_id' => $request->area_id,
+                'training_center_id' => $request->training_center_id,
+            ]);
+
+            if ($response->successful()) {
+                return redirect()->route('courses.index')->with('success', 'Curso actualizado con éxito');
+            }
+
+            return redirect()->back()->with('error', 'Error al actualizar el curso.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'No se pudo conectar con el servidor backend.');
+        }
     }
 }

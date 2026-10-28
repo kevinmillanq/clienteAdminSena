@@ -1,30 +1,28 @@
 @extends('layouts.app')
 
-@section('title', 'Equipo de cómputo')
-
 @section('content')
-<div class="container my-5">
-    <h2 class="mb-4 text-success">Detalles del Equipo de Cómputo</h2>
+    <h1>Detalle del Equipo</h1>
 
-    <div class="table-responsive">
-        <table class="table table-bordered table-hover">
-            <thead class="table-success">
-                <tr>
-                    <th scope="col">Atributo</th>
-                    <th scope="col">Valor</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($computer as $key => $value)
-                    <tr>
-                        <td>{{ $key }}</td>
-                        <td>{{ $value }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
+    @if(isset($computer) && isset($computer['id']))
+        <table class="table table-bordered" style="max-width: 500px;">
+            <tr>
+                <th style="width: 150px;">ID:</th>
+                <td>{{ $computer['id'] }}</td>
+            </tr>
+            <tr>
+                <th>Número:</th>
+                <td>{{ $computer['number'] }}</td>
+            </tr>
+            <tr>
+                <th>Marca:</th>
+                <td>{{ $computer['brand'] }}</td>
+            </tr>
         </table>
-    </div>
 
-    <a href="{{ route('computers.index') }}" class="btn btn-outline-success">Volver al listado</a>
-</div>
+        <a href="{{ route('computers.edit', $computer['id']) }}" class="btn btn-warning btn-sm">Editar</a>
+    @else
+        <p>No se encontró la información del equipo.</p>
+    @endif
+
+    <a href="{{ route('computers.index') }}" class="btn btn-outline-secondary btn-sm">Volver</a>
 @endsection

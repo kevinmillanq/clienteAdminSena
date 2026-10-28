@@ -1,31 +1,28 @@
 @extends('layouts.app')
 
-@section('title', 'Centro de formación')
-
 @section('content')
-<div class="container my-5">
-    <h2 class="mb-4 text-success">Detalles del Centro de Formación</h2>
+    <h1>Detalle del Centro de Formación</h1>
 
-    <div class="table-responsive">
-        <table class="table table-bordered table-hover">
-            <thead class="table-success">
-                <tr>
-                    <th scope="col">id</th>
-                    <th scope="col">name</th>
-                    <th scope="col">location</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($trainingCenter as $key => $value)
-                    <tr>
-                        <td>{{ $key }}</td>
-                        <td>{{ $value }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
+    @if(isset($trainingCenter) && isset($trainingCenter['id']))
+        <table class="table table-bordered" style="max-width: 500px;">
+            <tr>
+                <th style="width: 150px;">ID:</th>
+                <td>{{ $trainingCenter['id'] }}</td>
+            </tr>
+            <tr>
+                <th>Nombre:</th>
+                <td>{{ $trainingCenter['name'] }}</td>
+            </tr>
+            <tr>
+                <th>Ubicación:</th>
+                <td>{{ $trainingCenter['location'] ?? '' }}</td>
+            </tr>
         </table>
-    </div>
 
-    <a href="{{ route('training-centers.index') }}" class="btn btn-outline-success">Volver al listado</a>
-</div>
+        <a href="{{ route('training-centers.edit', $trainingCenter['id']) }}" class="btn btn-warning btn-sm">Editar</a>
+    @else
+        <p>No se encontró la información del centro.</p>
+    @endif
+
+    <a href="{{ route('training-centers.index') }}" class="btn btn-outline-secondary btn-sm">Volver</a>
 @endsection
